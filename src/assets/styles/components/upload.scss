@@ -1,0 +1,53 @@
+//图层管理
+.layers-btn {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px 12px;
+    cursor: pointer;
+    z-index: 1000;
+  }
+  
+  .layers-panel {
+    position: absolute;
+    bottom: 60px;
+    left: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 12px;
+    max-width: 200px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+  
+  .layers-panel h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 14px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+  }
+  
+  .layers-panel ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .layers-panel li {
+    margin-bottom: 8px;
+  }
+  
+  .layers-panel label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .layers-panel input[type="checkbox"] {
+    margin-right: 8px;
+  }

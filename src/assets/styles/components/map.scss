@@ -1,0 +1,59 @@
+:root {
+  --container-width: 100vw;
+  --container-height: 100vh;
+  overflow: hidden;
+}
+
+
+.map-container {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.ol-map {
+  width: 100%;
+  height: 100%;
+}
+
+    
+/* 调整缩放按钮位置 */
+.ol-zoom {
+  top: 10px;
+  right: 10px;
+  position: absolute;
+}
+
+/* 调整版权信息位置 */
+.ol-attribution {
+  bottom: 10px;
+  right: 10px;
+  position: absolute;
+}
+
+.menu-trigger {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 1500;
+  padding: 12px;
+  border: none;
+  border-radius: 4px;
+  background: rgba(72, 137, 234, 0.9);
+  box-shadow: 0 2px 4px rgba(3, 102, 250, 0.9);
+  cursor: pointer;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  i {
+    font-size: 1.2rem;
+    color: #ccc;
+  }
+}
