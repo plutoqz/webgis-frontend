@@ -29,14 +29,14 @@ const router = useRouter()
 const username = ref('')
 const password = ref('')
 
-const login = async () => {
+const handleLogin = async () => {
   try {
     const response = await axios.post('/api/login/', {
       username: username.value,
       password: password.value
     })
     console.log('Login success:', response.data)
-    router.push('/')
+    router.push('/components/Map')
   } catch (error) {
     console.error('Login failed:', error.response.data)
   }
