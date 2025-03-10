@@ -62,3 +62,23 @@
       }
     }
   }
+
+
+  // 知识图谱样式
+.knowledge-graph-container {
+  .graph-controls {
+    button {
+      background: #2196f3;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-left: 10px;
+
+      &:hover {
+        background: #1976d2;
+      }
+    }
+  }
+}

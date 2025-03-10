@@ -31,7 +31,14 @@
       <!-- 文件上传组件 -->
       <FileUpload :map="map" @layerAdded="handleLayerAdded" ref="fileUpload" />
       <!-- 上传postgresql -->
-      
+
+      <!-- 知识图谱 -->
+      <KnowledgeGraph 
+        v-if="showKnowledgeGraph"
+        @close="showKnowledgeGraph = false"
+        
+      />
+
     <!-- 菜单触发按钮 -->
     <button 
       class="menu-trigger"
@@ -53,6 +60,7 @@
 import { ref, onMounted } from 'vue'
 import SideMenu from './SideMenu.vue'
 import FileUpload from './upload.vue'
+import KnowledgeGraph from './KnowledgeGraph.vue'
 //import UploadFile from './FileUpload.vue'
 import Map from 'ol/Map'
 import View from 'ol/View'
@@ -68,6 +76,8 @@ let map = null
 
 // 图层管理状态
 const showLayersPanel = ref(false);
+// 在script部分添加
+const showKnowledgeGraph = ref(false);
 // 存储所有图层的配置
 const layerConfig = ref([
   {
@@ -141,6 +151,9 @@ const handleMenuAction = (action) => {
     // 手动打开文件选择框
     fileUpload.value.openFileSelector();
   } 
+  if (action === 'knowledgeGraph') {
+    showKnowledgeGraph.value = true;
+  }
   if(action==='toPostgresql'){
     // 调用 FileUpload 组件的 uploadToPostgresql 方法
     //fileUpload.value.uploadToPostgresql();

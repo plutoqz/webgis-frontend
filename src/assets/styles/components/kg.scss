@@ -1,0 +1,145 @@
+.knowledge-graph-container {
+    position: fixed!important;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.98);
+    z-index: 1000;
+    display: flex;
+  
+    .control-panel {
+      width: 300px;
+      background: #f5f7fa;
+      padding: 20px;
+      border-right: 1px solid #ddd;
+      overflow-y: auto;
+  
+      .import-buttons {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+  
+        .import-button {
+          flex: 1;
+          padding: 12px;
+          border-radius: 6px;
+          cursor: pointer;
+          text-align: center;
+          transition: all 0.3s;
+  
+          &.node-import {
+            background: #4CAF50;
+            color: white;
+  
+            &:hover {
+              background: #45a049;
+            }
+          }
+  
+          &.link-import {
+            background: #2196F3;
+            color: white;
+  
+            &:hover {
+              background: #1976D2;
+            }
+          }
+        }
+      }
+  
+      .data-preview {
+        .preview-box {
+          background: white;
+          border-radius: 6px;
+          padding: 15px;
+          margin-bottom: 15px;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  
+          h4 {
+            margin: 0 0 10px 0;
+            font-size: 14px;
+            color: #666;
+          }
+  
+          .preview-content {
+            max-height: 120px;
+            overflow-y: auto;
+            font-size: 12px;
+            color: #888;
+          }
+        }
+      }
+  
+      .control-section {
+        margin-top: 20px;
+  
+        .control-group {
+          margin-bottom: 15px;
+  
+          label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #666;
+          }
+  
+          select, input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+          }
+  
+          .action-button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background: #673AB7;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+  
+            &.danger {
+              background: #f44336;
+            }
+  
+            &:hover {
+              opacity: 0.9;
+            }
+          }
+        }
+      }
+    }
+  
+    .graph-view {
+      flex: 1;
+      position: relative;
+  
+      &.fullscreen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+      }
+    }
+  
+    .status-bar {
+      position: fixed;
+      bottom: 0;
+      left: 300px;
+      right: 0;
+      background: rgba(0,0,0,0.7);
+      color: white;
+      padding: 8px 20px;
+      font-size: 14px;
+      display: flex;
+      justify-content: space-between;
+  
+      .loading-status {
+        color: #FFC107;
+      }
+    }
+  }

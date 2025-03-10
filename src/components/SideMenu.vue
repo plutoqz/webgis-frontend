@@ -23,6 +23,10 @@
           <i class="fas fa-file-export"></i>
           数据导出
         </li>
+        <li @click="handleClick('knowledgeGraph')">
+        <i class="fas fa-project-diagram"></i>
+          知识图谱
+        </li>
       </ul>
     </div>
   </template>
