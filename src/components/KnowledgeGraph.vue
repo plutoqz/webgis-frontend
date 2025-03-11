@@ -84,6 +84,11 @@
             </button>
           </div>
         </div>
+        <!-- 新增返回按钮 -->
+      <button class="return-button" @click="handleReturn">
+        <i class="fas fa-arrow-left"></i>
+        返回地图
+      </button>
       </div>
   
       <div ref="graphContainer" class="graph-view"></div>
@@ -97,6 +102,7 @@
         <span class="link-count">{{ links.length }} 关系</span>
       </div>
     </div>
+    
   </template>
   
   <script setup>
@@ -104,7 +110,7 @@ import { ref, reactive, computed, onMounted, onBeforeUnmount } from 'vue'
 import * as echarts from 'echarts'
 import Papa from 'papaparse'
 import { debounce } from 'lodash'
-
+//import showKnowledgeGraph from './Map.vue'
 // 图表实例
 const chartInstance = ref(null)
 const graphContainer = ref(null)
@@ -135,22 +141,38 @@ const handleFileImport = (file, type) => {
     Papa.parse(file, {
       header: true,
       skipEmptyLines: true, // 新增：跳过空行
+      transformHeader: h => h.trim().toLowerCase(), // 规范化列名
+      transform: value => value.trim(), // 自动去除值两端的空格
+      error: (err) => {
+        console.error('[CSV解析错误]', err)
+        alert(`文件解析失败: ${err.message}`)
+      },
       complete: (results) => {
-        const data = results.data
-          .filter(item => item.id) // 过滤有效数据行
+        // 统一列名为小写
+        results.data = results.data.map(item => {
+          const newItem = {}
+          Object.keys(item).forEach(key => {
+            newItem[key.toLowerCase()] = item[key] // 列名转小写
+          })
+          return newItem
+        })
+        const data = results.data//.filter(item => item.id) // 过滤有效数据行
 
         if (type === 'node') {
           nodes.value = data.map(node => ({
             id: node.id.trim(),
             name: node.name.trim(),
-            symbolSize: Math.random() * 30 + 10,
+            //symbolSize: Math.random() * 30 + 10,
+            symbolSize:30,
             category: (node.category || 'default').trim()
           }))
         } else if (type === 'link') {
-          links.value = data.map(link => ({
+          links.value = data
+          //.filter(link => link.source && link.target) // 新增过滤条件
+          .map(link => ({
             source: link.source.trim(),
             target: link.target.trim(),
-            label: (link.relation || '').trim()
+            label: (link.relation || 'relation').trim()
           }))
         }
         resolve()
@@ -174,6 +196,7 @@ const handleLinkImport = async (e) => {
   if (file) {
     loading.value = true
     await handleFileImport(file, 'link')
+    console.log('Loaded Links:', links.value) // 调试输出
     updateChart()
     loading.value = false
   }
@@ -190,6 +213,7 @@ const updateChart = () => {
   // 生成有效的分类数据
   const categories = [...new Set(nodes.value.map(node => node.category || 'default'))]
     .map(category => ({ name: category }))
+
 
   const option = {
     tooltip: {},
@@ -218,12 +242,26 @@ const updateChart = () => {
         lineStyle: {
           width: 3
         }
+      },
+      // 添加关系标签配置
+      edgeLabel: {
+        show: true,
+        formatter: function(params) {
+          return params.data.label;
+        },
+        position: 'middle',
+        fontSize: 12,
+        color: '#000'
       }
     }]
   }
-  chartInstance.value.setOption(option)
+  chartInstance.value.setOption(option,true);
+
 }
 
+const handleReturn=()=>{
+  
+}
 
 const updateLayout = () => {
   loading.value = true

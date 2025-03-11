@@ -36,7 +36,6 @@
       <KnowledgeGraph 
         v-if="showKnowledgeGraph"
         @close="showKnowledgeGraph = false"
-        
       />
 
     <!-- 菜单触发按钮 -->
