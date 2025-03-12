@@ -59,7 +59,7 @@
             <select v-model="layoutType" @change="updateLayout">
               <option value="force">力导向布局</option>
               <option value="circular">环形布局</option>
-              <option value="radial">辐射布局</option>
+              
             </select>
           </div>
   
@@ -106,15 +106,18 @@
   </template>
   
   <script setup>
-import { ref, reactive, computed, onMounted, onBeforeUnmount } from 'vue'
+import { ref, reactive, computed, onMounted, onBeforeUnmount,defineEmits  } from 'vue'
 import * as echarts from 'echarts'
 import Papa from 'papaparse'
 import { debounce } from 'lodash'
+import { useKGStore } from '../stores/kgStore'
+
 //import showKnowledgeGraph from './Map.vue'
 // 图表实例
 const chartInstance = ref(null)
 const graphContainer = ref(null)
-
+// 定义自定义事件
+const emit = defineEmits(['close']);
 // 响应式数据
 const nodes = ref([])
 const links = ref([])
@@ -134,6 +137,22 @@ const fullscreenIcon = computed(() =>
 const fullscreenLabel = computed(() => 
   isFullscreen.value ? '退出全屏' : '全屏显示'
 )
+// 在onMounted中初始化Store和图表
+onMounted(async () => {
+  // 确保Pinia已初始化
+  const store = useKGStore() // ✅ 正确访问
+  
+  // 初始化图表
+  chartInstance.value = echarts.init(graphContainer.value)
+  
+  // 恢复持久化数据
+  if (store.nodes.length > 0 || store.links.length > 0) {
+    await updateChart(store.nodes, store.links)
+  }
+
+  // 窗口大小监听
+  window.addEventListener('resize', handleResize)
+})
 
 // 文件处理
 const handleFileImport = (file, type) => {
@@ -182,6 +201,7 @@ const handleFileImport = (file, type) => {
 }
 
 const handleNodeImport = async (e) => {
+  const store = useKGStore() 
   const file = e.target.files[0]
   if (file) {
     loading.value = true
@@ -189,6 +209,8 @@ const handleNodeImport = async (e) => {
     updateChart()
     loading.value = false
   }
+  store.setNodes(parsedNodes)
+  await updateChart(store.nodes, store.links)
 }
 
 const handleLinkImport = async (e) => {
@@ -211,9 +233,7 @@ const initChart = () => {
 
 const updateChart = () => {
   // 生成有效的分类数据
-  const categories = [...new Set(nodes.value.map(node => node.category || 'default'))]
-    .map(category => ({ name: category }))
-
+  const categories = [...new Set(nodes.value.map(node => node.category || 'default'))].map(category => ({ name: category }))
 
   const option = {
     tooltip: {},
@@ -260,8 +280,10 @@ const updateChart = () => {
 }
 
 const handleReturn=()=>{
-  
+  // 触发 close 事件，通知父组件关闭知识图谱
+  emit('close');
 }
+
 
 const updateLayout = () => {
   loading.value = true
@@ -275,8 +297,14 @@ const updateLayout = () => {
 const highlightNodes = debounce(() => {
   const keyword = searchTerm.value.toLowerCase()
   nodes.value.forEach(node => {
-    node.itemStyle = {
-      color: node.name.toLowerCase().includes(keyword) ? '#ff5722' : '#2196F3'
+    // 如果搜索框为空，恢复默认颜色
+    if (keyword === '') {
+      delete node.itemStyle;
+    } else {
+      // 如果搜索框有内容，根据是否匹配设置颜色
+      node.itemStyle = {
+        color: node.name.toLowerCase().includes(keyword) ? '#ff5722' : '#2196F3'
+      };
     }
   })
   updateChart()
@@ -297,8 +325,7 @@ const clearData = () => {
   chartInstance.value.clear()
 }
 
-// 生命周期
-onMounted(initChart)
+// 组件卸载前保存位置
 onBeforeUnmount(() => {
   if (chartInstance.value) {
     chartInstance.value.dispose()

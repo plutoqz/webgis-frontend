@@ -35,12 +35,13 @@
       <!-- 知识图谱 -->
       <KnowledgeGraph 
         v-if="showKnowledgeGraph"
-        @close="showKnowledgeGraph = false"
+        @close="handleKnowledgeGraphClose"
       />
 
     <!-- 菜单触发按钮 -->
     <button 
       class="menu-trigger"
+      v-if="showMenuButton"
       @click="toggleMenu"
     >
       <i class="fas fa-layer-group"></i>
@@ -73,6 +74,7 @@ import { defaults as defaultControls, Zoom, Attribution,Rotate  } from 'ol/contr
 const mapEl = ref(null)
 let map = null
 
+const showMenuButton = ref(true); // 控制菜单按钮的显示状态
 // 图层管理状态
 const showLayersPanel = ref(false);
 // 在script部分添加
@@ -140,7 +142,7 @@ onMounted(() => {
   map.on('click', () => {
     if(showMenu.value) showMenu.value = false
   })
-
+  //provide('pinia', pinia)
 })
 
 // 处理侧边菜单的操作
@@ -152,6 +154,7 @@ const handleMenuAction = (action) => {
   } 
   if (action === 'knowledgeGraph') {
     showKnowledgeGraph.value = true;
+    showMenuButton.value = false; // 进入知识图谱时隐藏菜单按钮
   }
   if(action==='toPostgresql'){
     // 调用 FileUpload 组件的 uploadToPostgresql 方法
@@ -234,7 +237,11 @@ const toggleLayerVisibility = (layer) => {
   layer.layer.setVisible(!layer.layer.getVisible());
   layer.visible = !layer.visible;
 };
-
+// 知识图谱关闭时重新显示菜单按钮
+const handleKnowledgeGraphClose = () => {
+  showKnowledgeGraph.value = false;
+  showMenuButton.value = true;
+};
 // 显示/隐藏图层管理面板
 const toggleLayersPanel = () => {
   showLayersPanel.value = !showLayersPanel.value;

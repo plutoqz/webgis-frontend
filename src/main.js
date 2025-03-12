@@ -1,4 +1,5 @@
 import { createApp } from 'vue'
+import { createPinia } from 'pinia'
 import './style.css'
 import App from './App.vue'
 import axios from 'axios'
@@ -8,8 +9,10 @@ import api from './services/api'
 //createApp(App).mount('#app')
 //createApp(App).use(router).mount('#app')
 // 在全局配置中添加 axios
+const pinia = createPinia()
 createApp(App)
   .use(router)
+  .use(pinia)
   .provide('$axios', axios) // 或者使用 config.globalProperties 来挂载
   .mount('#app')
   .config.globalProperties.$axios = axios.create({
