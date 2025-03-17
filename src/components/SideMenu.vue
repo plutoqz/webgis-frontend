@@ -8,7 +8,7 @@
       </div>
       <ul>
         <li @click="handleClick('upload')">
-          <i class="fas fa-chart-file"></i>
+          <i class="fas fa-file"></i>
           打开文件
         </li>
         <li @click="handleClick('analysis')">
@@ -16,7 +16,7 @@
           空间分析
         </li>
         <li @click="handleClick('toPostgresql')">
-          <i class="fas fa-map-toPostgresql"></i>
+          <i class="fas fa-upload"></i>
           上传文件
         </li>
         <li @click="handleClick('export')">

@@ -85,7 +85,7 @@ const layerConfig = ref([
     name: 'OSM 底图',
     type: 'base',
     visible: true,
-    icon: 'fas fa-globe',
+    //icon: 'fas fa-globe',
     layer: null, // OpenLayers 图层实例
   },
 ]);
@@ -187,7 +187,7 @@ const handleFileUploaded = (fileData) => {
     name: fileData.name,
     type: 'vector',
     visible: true,
-    icon: 'fas fa-map',
+    //icon: 'fas fa-map',
     layer: vectorLayer,
   })
 
@@ -223,7 +223,7 @@ const handleLayerAdded = (vectorLayer) => {
     name: layerName,
     type: 'vector',
     visible: true,
-    icon: layerIcon,
+    //icon: layerIcon,
     layer: vectorLayer,
   });
 
